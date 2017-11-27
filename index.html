@@ -8,8 +8,25 @@
 
   <body>
     <div id="app">
+	<input v-model="division" placeholder="Division" type="text" />
+	<input v-model="text" placeholder="String search" type="text" />
+	<input v-model="start" placeholder="Start Date" type="text" />
+	<input v-model="end" placeholder="End Date" type="text" />
+	
+
       <button v-on:click="greet">Greet</button>
-      {{ somedata }}
+      <div v-for="event in events">
+        <span>
+          {{event.name.fi}} ||
+          {{event.start_time}} ||
+          {{event.location_extra_info ? event.location_extra_info.fi : event.location}}
+        </span>
+        {{event.keywords}} <br>
+          {{event.description ? event.description.fi : ''}}
+        <br>
+        <br>
+        <br>
+      </div>
     </div>
 
     <!-- script should be loaded after page is rendered -->
