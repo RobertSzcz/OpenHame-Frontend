@@ -9,7 +9,18 @@
   <body>
     <div id="app">
       <button v-on:click="greet">Greet</button>
-      {{ somedata }}
+      <div v-for="event in events">
+        <span>
+          {{event.name.fi}} ||
+          {{event.start_time}} ||
+          {{event.location_extra_info ? event.location_extra_info.fi : event.location}}
+        </span>
+        {{event.keywords}} <br>
+          {{event.description ? event.description.fi : ''}}
+        <br>
+        <br>
+        <br>
+      </div>
     </div>
 
     <!-- script should be loaded after page is rendered -->
