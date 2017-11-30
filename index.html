@@ -7,14 +7,32 @@
   </head>
 
   <body>
-    <div id="app">
-	<input v-model="division" placeholder="Division" type="text" />
+  <div id="searchElement">
+  	<input v-model="division" placeholder="Division" type="text" />
+  	<input v-model="location" placeholder="Location" type="text"/>
 	<input v-model="text" placeholder="String search" type="text" />
 	<input v-model="start" placeholder="Start Date" type="text" />
 	<input v-model="end" placeholder="End Date" type="text" />
 	
+	<select v-model="orderBy">
+	<option disabled value="">Please select one</option>
+	<option>date</option>	
+	<option>location</option>
+	<option>division</option>
+	<option>name</option>
+	</select>
+	<span>Selected: {{ orderBy }}</span>
+	
+	
+	<input type="checkbox" v-model="ascending">
+	<label for="checkbox">Ascending</label>
+	<button v-on:click="greet">Greet</button>
+  </div>
+    <div id="resultElement">
 
-      <button v-on:click="greet">Greet</button>
+	
+
+      
       <div v-for="event in events">
         <span>
           {{event.name.fi}} ||
