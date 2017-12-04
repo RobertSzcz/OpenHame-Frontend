@@ -61,7 +61,6 @@ var app = new Vue({
     startDate: null,
     endDate: null,
     config: {
-      altFormat: "F-m-Y",
       altInput: true
     }
   },
@@ -71,6 +70,7 @@ var app = new Vue({
       vm.somedata = 'loading...'
       DS.getEvents({}, function(data) {
         vm.events = data.data
+        console.log(vm.startDate);
       })
     }
   }

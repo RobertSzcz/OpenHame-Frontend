@@ -16,8 +16,9 @@
 
 <body>
   <div id="app">
-
+    <label>Event starting date:</label>
     <date-picker v-model="startDate" :config="config" :required="true" placeholder="Select start date"></date-picker>
+    <label>Event ending date:</label>
     <date-picker v-model="endDate" :config="config" :required="true" placeholder="Select end date"></date-picker>
 
     <button v-on:click="greet">Greet</button>
