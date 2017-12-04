@@ -1,28 +1,40 @@
 <html>
-  <head>
-    <title> OpenHame </title>
-    <script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
-    <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
-  </head>
 
-  <body>
-    <div id="app">
-      <button v-on:click="greet">Greet</button>
-      <div v-for="event in events">
-        <span>
+<head>
+  <title> OpenHame </title>
+  <script src="https://unpkg.com/vue@2.0.3/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+
+  <!-- Flatpickr (datepicker) related files -->
+  <link href="https://unpkg.com/flatpickr@4/dist/flatpickr.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/flatpickr@4/dist/flatpickr.min.js"></script>
+  <!-- datepicker -->
+  <script src="https://unpkg.com/vue-flatpickr-component@5"></script>
+
+</head>
+
+<body>
+  <div id="app">
+
+    <date-picker v-model="startDate" :config="config" :required="true" placeholder="Select start date"></date-picker>
+    <date-picker v-model="endDate" :config="config" :required="true" placeholder="Select end date"></date-picker>
+
+    <button v-on:click="greet">Greet</button>
+    <div v-for="event in events">
+      <span>
           {{event.name.fi}} ||
           {{event.start_time}} ||
-          {{event.location.name.fi}} || 
-        </span>
-          {{event.description ? event.description.fi : ''}}
-        <br>
-        <br>
-        <br>
-      </div>
+          {{event.location.name.fi}} ||
+        </span> {{event.description ? event.description.fi : ''}}
+      <br>
+      <br>
+      <br>
     </div>
+  </div>
 
-    <!-- script should be loaded after page is rendered -->
-    <script src="./script.js"></script>
-  </body>
+  <!-- script should be loaded after page is rendered -->
+  <script src="./script.js"></script>
+</body>
+
 </html>

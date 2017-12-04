@@ -1,6 +1,8 @@
 const API = 'https://api.hel.fi/linkedevents/v1/'
 const API_EVENT = API + 'event'
 const API_KEY = 'API_KEY123'
+// Initialize datepicker as global component
+Vue.component('date-picker', VueFlatpickr);
 
 var DS = {
   getEvents: function(params, callback) {
@@ -23,7 +25,7 @@ var DS = {
         })
         locationsUrlList = _.uniq(locationsUrlList)
         //build promises array of dependent locations
-        promises = _.map(locationsUrlList, function(url){
+        promises = _.map(locationsUrlList, function(url) {
           return axios({
             method: 'get',
             url: url
@@ -38,14 +40,16 @@ var DS = {
               locationsDependencyHash[promiseResponse.data["@id"]] = promiseResponse.data
             })
             // this changes the content of response.data.data - im not sure about this solution, it might be refactored to more functional way
-             _.map(eventsData, function(event) {
+            _.map(eventsData, function(event) {
               event.location = locationsDependencyHash[event.location["@id"]]
             })
             // run callback
             callback(response.data)
           })
       })
-      .catch(function(error) { callback(error) })
+      .catch(function(error) {
+        callback(error)
+      })
   }
 }
 
@@ -53,7 +57,13 @@ var app = new Vue({
   el: '#app',
   data: {
     name: 'Vue.js',
-    events: ''
+    events: '',
+    startDate: null,
+    endDate: null,
+    config: {
+      altFormat: "F-m-Y",
+      altInput: true
+    }
   },
   methods: {
     greet: function(event) {
