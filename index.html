@@ -17,14 +17,15 @@
 <body>
   <div id="app">
     <label>Event starting date:</label>
-    <date-picker v-model="startDate" :config="config" :required="true" placeholder="Select start date"></date-picker>
+    <date-picker v-model="searchForm.params.start" :config="searchForm.config" :required="true" placeholder="Select start date"></date-picker>
     <label>Event ending date:</label>
-    <date-picker v-model="endDate" :config="config" :required="true" placeholder="Select end date"></date-picker>
+    <date-picker v-model="searchForm.params.end" :config="searchForm.config" :required="true" placeholder="Select end date"></date-picker>
+
 
     <button v-on:click="greet">Greet</button>
     <div v-for="event in events">
       <span>
-          {{event.name.fi}} ||
+          {{event.name ? event.name.fi : '' }} ||
           {{event.start_time}} ||
           {{event.location.name.fi}} ||
         </span> {{event.description ? event.description.fi : ''}}

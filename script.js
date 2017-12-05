@@ -1,19 +1,19 @@
 const API = 'https://api.hel.fi/linkedevents/v1/'
 const API_EVENT = API + 'event'
-const API_KEY = 'API_KEY123'
+// const API_KEY = 'API_KEY123'
 // Initialize datepicker as global component
 Vue.component('date-picker', VueFlatpickr);
 
 var DS = {
   getEvents: function(params, callback) {
-    var request_params = {}
-    _.merge(request_params, {
-      api_key: API_KEY
-    }, params)
+    // var request_params = {}
+    // _.merge(request_params, {
+    //   api_key: API_KEY
+    // }, params)
     axios({
         method: 'get',
         url: API_EVENT,
-        params: request_params
+        params: params
       })
       .then(function(response) {
         var eventsData = response.data.data
@@ -56,21 +56,23 @@ var DS = {
 var app = new Vue({
   el: '#app',
   data: {
-    name: 'Vue.js',
     events: '',
-    startDate: null,
-    endDate: null,
-    config: {
-      altInput: true
+    searchForm: {
+      params: {
+        start: null,
+        end: null
+      },
+      config: {
+        altInput: true
+      }
     }
+
   },
   methods: {
     greet: function(event) {
       var vm = this
-      vm.somedata = 'loading...'
-      DS.getEvents({}, function(data) {
+      DS.getEvents(vm.searchForm.params, function(data) {
         vm.events = data.data
-        console.log(vm.startDate);
       })
     }
   }
