@@ -1,5 +1,6 @@
 const API = 'https://api.hel.fi/linkedevents/v1/'
 const API_EVENT = API + 'event'
+const API_SEARCH = API + 'search'
 // const API_KEY = 'API_KEY123'
 // Initialize datepicker as global component
 Vue.component('date-picker', VueFlatpickr);
@@ -13,7 +14,8 @@ var DS = {
     axios({
         method: 'get',
         url: API_EVENT,
-        params: params
+        // removes empty keys
+        params: _.pickBy(params, _.identity)
       })
       .then(function(response) {
         var eventsData = response.data.data
@@ -34,7 +36,7 @@ var DS = {
         //retrieve dependent locations and add them to response data
         Promise.all(promises)
           .then(promiseResponses => {
-            console.log(promiseResponses)
+          //  console.log(promiseResponses)
             // fill the dependency hash
             _.forEach(promiseResponses, function(promiseResponse) {
               locationsDependencyHash[promiseResponse.data["@id"]] = promiseResponse.data
@@ -50,28 +52,70 @@ var DS = {
       .catch(function(error) {
         callback(error)
       })
+  },
+  getSearch: function(callback) {
+    axios({
+        method: 'get',
+        url: API_SEARCH,
+      })
+      .then(function(response) {
+        callback(response.data)
+      })
+      .catch(function(error) {
+        console.log(error)
+        callback(error)
+      })
   }
 }
 
-var app = new Vue({
-  el: '#app',
+var searchForm = new Vue({
+  el: '#searchForm',
   data: {
-    events: '',
-    searchForm: {
-      params: {
-        start: null,
-        end: null
-      },
-      config: {
-        altInput: true
-      }
+    start: null,
+    end: null,
+    division: '',
+    location: '',
+    text: '',
+    ascending: '',
+    orderBy: '',
+    location: '',
+    config: {
+      altInput: true
     }
-
   },
   methods: {
-    greet: function(event) {
+    getResults: function(event) {
       var vm = this
-      DS.getEvents(vm.searchForm.params, function(data) {
+      console.log(_.omit(vm.$data, ['config']))
+      eventsResult.getResults(
+        _.omit(vm.$data, ['config'])
+      )
+    },
+    getSuggestion: function(type,val) {
+		//search/?type=place&input=sibe
+      DS.getSearch({type:type, input:val}, function(data) {
+        //vm.events = data.data
+		    //console.log(data.data);
+      })
+    }
+  },
+  watch: {
+    location: function(val, oldVal) {
+      vm = this
+	    vm.getSuggestion("place",val);
+    }
+  }
+})
+
+var eventsResult = new Vue({
+  el: '#eventsResult',
+  data: {
+    events: ''
+  },
+  methods: {
+    getResults: function(params) {
+      var vm = this
+      DS.getEvents(params, function(data) {
         vm.events = data.data
       })
     }
