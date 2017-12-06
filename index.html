@@ -15,22 +15,36 @@
 </head>
 
 <body>
-  <div id="app">
+  <div id="searchForm">
+    <input v-model="division" placeholder="Division" type="text" />
+    <input v-model="location" placeholder="Location" type="text"/>
     <label>Event starting date:</label>
-    <date-picker v-model="searchForm.params.start" :config="searchForm.config" :required="true" placeholder="Select start date"></date-picker>
+    <date-picker v-model="start" :config="config" :required="true" placeholder="Select start date"></date-picker>
     <label>Event ending date:</label>
-    <date-picker v-model="searchForm.params.end" :config="searchForm.config" :required="true" placeholder="Select end date"></date-picker>
+    <date-picker v-model="end" :config="config" :required="true" placeholder="Select end date"></date-picker>
+
+    <select v-model="orderBy">
+    <option disabled value="">Please select one</option>
+    <option>date</option>
+    <option>location</option>
+    <option>division</option>
+    <option>name</option>
+    </select>
+    <span>Selected: {{ orderBy }}</span>
 
 
-    <button v-on:click="greet">Greet</button>
+    <input type="checkbox" v-model="ascending">
+    <label for="checkbox">Ascending</label>
+    <button v-on:click="getResults">Get Events</button>
+  </div>
+
+  <div id="eventsResult">
     <div v-for="event in events">
       <span>
           {{event.name ? event.name.fi : '' }} ||
           {{event.start_time}} ||
           {{event.location.name.fi}} ||
         </span> {{event.description ? event.description.fi : ''}}
-      <br>
-      <br>
       <br>
     </div>
   </div>
