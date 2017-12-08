@@ -18,6 +18,7 @@
   <div id="searchForm">
     <input v-model="division" placeholder="Division" type="text" />
     <input v-model="location" placeholder="Location" type="text"/>
+    <input v-model="text" placeholder="Search text" type="text"/>
     <label>Event starting date:</label>
     <date-picker v-model="start" :config="config" :required="true" placeholder="Select start date"></date-picker>
     <label>Event ending date:</label>
@@ -47,7 +48,7 @@
         </span> {{event.description ? event.description.fi : ''}}
       <br>
     </div>
-    <p v-if="metaData.count > 20">Current page is: {{ getPageNumber() }}</p>
+    <p v-if="metaData.count > 20">Current page is: {{ getPageNumber() }} / {{pageCount}}</p>
     <button v-if="getPageNumber() > 1" v-on:click="previousPage">Previous page ({{ getPageNumber()-1 }}) </button>
     <button v-if="metaData.count > 20 && getPageNumber() < pageCount" v-on:click="nextPage">Next page ({{ getPageNumber()+1 }}) </button>
   </div>
