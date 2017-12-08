@@ -73,6 +73,7 @@ var searchForm = new Vue({
   data: {
     start: null,
     end: null,
+    page: 1,
     division: '',
     location: '',
     text: '',
@@ -84,6 +85,10 @@ var searchForm = new Vue({
     }
   },
   methods: {
+    eventSearch: function(){
+      this.page = 1;
+      searchForm.getResults();
+    },
     getResults: function(event) {
       var vm = this
       console.log(_.omit(vm.$data, ['config']))
@@ -110,14 +115,33 @@ var searchForm = new Vue({
 var eventsResult = new Vue({
   el: '#eventsResult',
   data: {
-    events: ''
+    events: '',
+    metaData: '',
+    pageCount: 0,
+    pageNumber: null
+
   },
   methods: {
     getResults: function(params) {
       var vm = this
       DS.getEvents(params, function(data) {
         vm.events = data.data
+        vm.metaData = data.meta
+        vm.pageCount = Math.ceil((vm.metaData.count/20))
+        console.log(vm.pageCount)
       })
+    },
+    getPageNumber: function(){
+      pageNumber = searchForm.page;
+      return pageNumber;
+    },
+    nextPage: function(){
+      searchForm.page++;
+      searchForm.getResults();
+    },
+    previousPage: function(){
+      searchForm.page--;
+      searchForm.getResults();
     }
   }
 })

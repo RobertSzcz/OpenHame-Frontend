@@ -35,7 +35,7 @@
 
     <input type="checkbox" v-model="ascending">
     <label for="checkbox">Ascending</label>
-    <button v-on:click="getResults">Get Events</button>
+    <button v-on:click="eventSearch">Get Events</button>
   </div>
 
   <div id="eventsResult">
@@ -47,6 +47,9 @@
         </span> {{event.description ? event.description.fi : ''}}
       <br>
     </div>
+    <p v-if="metaData.count > 20">Current page is: {{ getPageNumber() }}</p>
+    <button v-if="getPageNumber() > 1" v-on:click="previousPage">Previous page ({{ getPageNumber()-1 }}) </button>
+    <button v-if="metaData.count > 20 && getPageNumber() < pageCount" v-on:click="nextPage">Next page ({{ getPageNumber()+1 }}) </button>
   </div>
 
   <!-- script should be loaded after page is rendered -->
