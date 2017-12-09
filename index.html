@@ -16,25 +16,25 @@
 
 <body>
   <div id="searchForm">
-    <input v-model="division" placeholder="Division" type="text" />
-    <input v-model="location" placeholder="Location" type="text"/>
-    <input v-model="text" placeholder="Search text" type="text"/>
+    <input v-model="inputVals.division" placeholder="Division" type="text" />
+    <input v-model="inputVals.location" placeholder="Location" type="text"/>
+    <input v-model="inputVals.text" placeholder="Search text" type="text"/>
     <label>Event starting date:</label>
-    <date-picker v-model="start" :config="config" :required="true" placeholder="Select start date"></date-picker>
+    <date-picker v-model="inputVals.start" :config="config" :required="true" placeholder="Select start date"></date-picker>
     <label>Event ending date:</label>
-    <date-picker v-model="end" :config="config" :required="true" placeholder="Select end date"></date-picker>
+    <date-picker v-model="inputVals.end" :config="config" :required="true" placeholder="Select end date"></date-picker>
 
-    <select v-model="orderBy">
+    <select v-model="inputVals.orderBy">
     <option disabled value="">Please select one</option>
     <option>date</option>
     <option>location</option>
     <option>division</option>
     <option>name</option>
     </select>
-    <span>Selected: {{ orderBy }}</span>
+    <span>Selected: {{ inputVals.orderBy }}</span>
 
 
-    <input type="checkbox" v-model="ascending">
+    <input type="checkbox" v-model="inputVals.ascending">
     <label for="checkbox">Ascending</label>
     <button v-on:click="eventSearch">Get Events</button>
   </div>

@@ -36,7 +36,7 @@ var DS = {
         //retrieve dependent locations and add them to response data
         Promise.all(promises)
           .then(promiseResponses => {
-          //  console.log(promiseResponses)
+            //  console.log(promiseResponses)
             // fill the dependency hash
             _.forEach(promiseResponses, function(promiseResponse) {
               locationsDependencyHash[promiseResponse.data["@id"]] = promiseResponse.data
@@ -71,44 +71,64 @@ var DS = {
 var searchForm = new Vue({
   el: '#searchForm',
   data: {
-    start: null,
-    end: null,
-    page: 1,
-    division: '',
-    location: '',
-    text: '',
-    ascending: '',
-    orderBy: '',
-    location: '',
+    //These are user inputted values.
+    inputVals: {
+      start: null,
+      end: null,
+      page: 1,
+      division: '',
+      location: '',
+      text: '',
+      ascending: '',
+      orderBy: '',
+      location: ''
+    },
+    //These values are used for get requests and to go trough the possible results. Search values will change only if user clicks getEvents-button again.
+    //If there is multiple result pages and user clicks nextPage or previousPage buttons, searchVals are used to get the results.
+    //Example if user is on result page 2 and makes changes to input values and then returns to clicks nextPage --> the webpage still functions normally (searchVals wont change).
+    searchVals:{},
     config: {
       altInput: true
     }
   },
   methods: {
-    eventSearch: function(){
-      this.page = 1;
+    eventSearch: function() { //This function is used only when user clicks getEvents-button
+
+      this.copyObject(this.searchVals,this.inputVals); //this copies the user inputted values to second object used to make the get request
       searchForm.getResults();
+
+    },
+    copyObject:function(toSet,toGet){
+      Object.keys(toGet).forEach((key)=>{
+        this.$set(toSet, key, toGet[key]);
+      });
+
     },
     getResults: function(event) {
       var vm = this
-      console.log(_.omit(vm.$data, ['config']))
+      console.log("Input values:",_.omit(vm.inputVals, ['config']))
+      console.log("Search values:",_.omit(vm.searchVals, ['config']))
       eventsResult.getResults(
-        _.omit(vm.$data, ['config'])
+        _.omit(vm.searchVals, ['config'])
       )
     },
-    getSuggestion: function(type,val) {
-		//search/?type=place&input=sibe
-      DS.getSearch({type:type, input:val}, function(data) {
+    getSuggestion: function(type, val) {
+      //search/?type=place&input=sibe
+      DS.getSearch({
+        type: type,
+        input: val
+      }, function(data) {
         //vm.events = data.data
-		    //console.log(data.data);
+        //console.log(data.data);
       })
     }
   },
   watch: {
     location: function(val, oldVal) {
       vm = this
-	    vm.getSuggestion("place",val);
-    }
+      vm.getSuggestion("place", val);
+    },
+
   }
 })
 
@@ -127,20 +147,20 @@ var eventsResult = new Vue({
       DS.getEvents(params, function(data) {
         vm.events = data.data
         vm.metaData = data.meta
-        vm.pageCount = Math.ceil((vm.metaData.count/20))
-        console.log(vm.pageCount)
+        vm.pageCount = Math.ceil((vm.metaData.count / 20)) //This returns the total number of pages
+        console.log("Total number of pages:", vm.pageCount)
       })
     },
-    getPageNumber: function(){
-      pageNumber = searchForm.page;
+    getPageNumber: function() {
+      pageNumber = searchForm.searchVals.page;
       return pageNumber;
     },
-    nextPage: function(){
-      searchForm.page++;
+    nextPage: function() {
+      searchForm.searchVals.page++;
       searchForm.getResults();
     },
-    previousPage: function(){
-      searchForm.page--;
+    previousPage: function() {
+      searchForm.searchVals.page--;
       searchForm.getResults();
     }
   }
