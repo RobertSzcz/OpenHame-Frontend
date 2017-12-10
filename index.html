@@ -20,6 +20,8 @@
   <div id="left">
     <div class="searchBackground">
       <div id="searchForm">
+        <p class="searchItemHeader">Query</p>
+        <input class="searchTextBox" v-model="q" placeholder="Query" type="text" />
         <p class="searchItemHeader">Location</p>
         <input class="searchTextBox" v-model="location" placeholder="Location" type="text" />
         <p class="searchItemHeader">Event starting date</p>
@@ -46,6 +48,8 @@
 
         </div>
       </div>
+      <button v-if="previous" v-on:click="getPreviousPage">Previous</button>
+      <button v-if="next" v-on:click="getNextPage">Next</button>
     </div>
   </div>
   <!-- script should be loaded after page is rendered -->

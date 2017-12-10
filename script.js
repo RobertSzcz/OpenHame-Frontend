@@ -1,19 +1,64 @@
 const API = 'https://api.hel.fi/linkedevents/v1/'
 const API_EVENT = API + 'event'
-const API_SEARCH = API + 'search'
+const API_SEARCH_EVENT = API + 'search?type=event'
 // const API_KEY = 'API_KEY123'
 // Initialize datepicker as global component
 Vue.component('date-picker', VueFlatpickr);
 
 var DS = {
+  // should be DRY-ed after presentation
+  getEventsByUrl: function(url, callback) {
+    axios({
+        method: 'get',
+        url: url,
+      })
+      .then(function(response) {
+        var eventsData = response.data.data
+        var locationsUrlList = []
+        var locationsDependencyHash = {}
+        //build dependency hash
+        _.forEach(eventsData, function(event) {
+          locationsUrlList.push(event.location["@id"])
+        })
+        locationsUrlList = _.uniq(locationsUrlList)
+        //build promises array of dependent locations
+        promises = _.map(locationsUrlList, function(url) {
+          return axios({
+            method: 'get',
+            url: url
+          })
+        })
+        //retrieve dependent locations and add them to response data
+        Promise.all(promises)
+          .then(promiseResponses => {
+            //  console.log(promiseResponses)
+            // fill the dependency hash
+            _.forEach(promiseResponses, function(promiseResponse) {
+              locationsDependencyHash[promiseResponse.data["@id"]] = promiseResponse.data
+            })
+            // this changes the content of response.data.data - im not sure about this solution, it might be refactored to more functional way
+            _.map(eventsData, function(event) {
+              event.location = locationsDependencyHash[event.location["@id"]]
+            })
+            // run callback
+            callback(response.data)
+          })
+      })
+      .catch(function(error) {
+        callback(error)
+      })
+  },
+
   getEvents: function(params, callback) {
     // var request_params = {}
     // _.merge(request_params, {
     //   api_key: API_KEY
     // }, params)
+    var url = params.q ? API_SEARCH_EVENT : API_EVENT
+    console.log(url)
     axios({
         method: 'get',
-        url: API_EVENT,
+        url: url,
         // removes empty keys
         params: _.pickBy(params, _.identity)
       })
@@ -73,9 +118,10 @@ var searchForm = new Vue({
   data: {
     start: null,
     end: null,
+    page: 1,
     division: '',
     location: '',
-    text: '',
+    q: '',
     ascending: '',
     orderBy: '',
     location: '',
@@ -97,14 +143,49 @@ var searchForm = new Vue({
 var eventsResult = new Vue({
   el: '#eventsResult',
   data: {
-    events: ''
+    events: '',
+    metaData: '',
+    pageCount: 0,
+    pageNumber: null,
+    previous: '',
+    next: ''
   },
   methods: {
     getResults: function(params) {
       var vm = this
       DS.getEvents(params, function(data) {
+        console.log(data.meta)
         vm.events = data.data
+        vm.metaData = data.meta
+        vm.pageCount = Math.ceil((vm.metaData.count / 20)) //This returns the total number of pages
+        data.meta.previous ? vm.previous = data.meta.previous : null
+        data.meta.next ? vm.next = data.meta.next : null
+        console.log("Total number of pages:", vm.pageCount)
       })
-    }
-  }
+    },
+    // to DRY
+    getPreviousPage: function(){
+      var vm = this
+      DS.getEventsByUrl(vm.previous, function(data) {
+        console.log(data.meta)
+        vm.events = data.data
+        vm.metaData = data.meta
+        vm.pageCount = Math.ceil((vm.metaData.count / 20)) //This returns the total number of pages
+        data.meta.previous ? vm.previous = data.meta.previous : null
+        data.meta.next ? vm.next = data.meta.next : null
+        console.log("Total number of pages:", vm.pageCount)
+      })
+    },
+    getNextPage: function(){
+      var vm = this
+      DS.getEventsByUrl(vm.next, function(data) {
+        console.log(data.meta)
+        vm.events = data.data
+        vm.metaData = data.meta
+        vm.pageCount = Math.ceil((vm.metaData.count / 20)) //This returns the total number of pages
+        data.meta.previous ? vm.previous = data.meta.previous : null
+        data.meta.next ? vm.next = data.meta.next : null
+        console.log("Total number of pages:", vm.pageCount)
+    })
+  }}
 })
