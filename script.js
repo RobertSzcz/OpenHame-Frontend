@@ -36,7 +36,7 @@ var DS = {
         //retrieve dependent locations and add them to response data
         Promise.all(promises)
           .then(promiseResponses => {
-          //  console.log(promiseResponses)
+            //  console.log(promiseResponses)
             // fill the dependency hash
             _.forEach(promiseResponses, function(promiseResponse) {
               locationsDependencyHash[promiseResponse.data["@id"]] = promiseResponse.data
@@ -91,20 +91,24 @@ var searchForm = new Vue({
         _.omit(vm.$data, ['config'])
       )
     },
-    getSuggestion: function(type,val) {
-		//search/?type=place&input=sibe
-      DS.getSearch({type:type, input:val}, function(data) {
+    getSuggestion: function(type, val) {
+      //search/?type=place&input=sibe
+      DS.getSearch({
+        type: type,
+        input: val
+      }, function(data) {
         //vm.events = data.data
-		    //console.log(data.data);
+        //console.log(data.data);
       })
     }
   },
   watch: {
     location: function(val, oldVal) {
       vm = this
-	    vm.getSuggestion("place",val);
+      vm.getSuggestion("place", val);
     }
   }
+
 })
 
 var eventsResult = new Vue({
@@ -118,6 +122,9 @@ var eventsResult = new Vue({
       DS.getEvents(params, function(data) {
         vm.events = data.data
       })
+    },
+    formatDate: function(a) {
+      console.log("moi");
     }
   }
 })
