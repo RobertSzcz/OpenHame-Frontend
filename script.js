@@ -1,6 +1,7 @@
 const API = 'https://api.hel.fi/linkedevents/v1/'
 const API_EVENT = API + 'event'
 const API_SEARCH_EVENT = API + 'search?type=event'
+const API_SEARCH_PLACE = API + 'search?type=place'
 // const API_KEY = 'API_KEY123'
 // Initialize datepicker as global component
 Vue.component('date-picker', VueFlatpickr);
@@ -55,61 +56,69 @@ var DS = {
     //   api_key: API_KEY
     // }, params)
     var url = params.q ? API_SEARCH_EVENT : API_EVENT
-    console.log(url)
-    axios({
-        method: 'get',
-        url: url,
-        // removes empty keys
-        params: _.pickBy(params, _.identity)
-      })
-      .then(function(response) {
-        var eventsData = response.data.data
-        var locationsUrlList = []
-        var locationsDependencyHash = {}
-        //build dependency hash
-        _.forEach(eventsData, function(event) {
-          locationsUrlList.push(event.location["@id"])
+    if (params.location) {
+      locationPromise = new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          url: API_SEARCH_PLACE,
+          params: {input: params.location}
+        }).then(function(response){
+          var locationId = response.data.data[0].id
+          console.log(locationId)
+          resolve(locationId)
+        }).catch(function(error){
+          console.log(error)
+          reject()
         })
-        locationsUrlList = _.uniq(locationsUrlList)
-        //build promises array of dependent locations
-        promises = _.map(locationsUrlList, function(url) {
-          return axios({
-            method: 'get',
-            url: url
-          })
+      })
+    } else {
+      locationPromise = Promise.resolve()
+    }
+    locationPromise.then(location => {
+      requestParams = _.omit(params, ['location'])
+      location ? requestParams.location = location : null
+      axios({
+          method: 'get',
+          url: url,
+          // removes empty keys
+          params: requestParams
         })
-        //retrieve dependent locations and add them to response data
-        Promise.all(promises)
-          .then(promiseResponses => {
-            //  console.log(promiseResponses)
-            // fill the dependency hash
-            _.forEach(promiseResponses, function(promiseResponse) {
-              locationsDependencyHash[promiseResponse.data["@id"]] = promiseResponse.data
-            })
-            // this changes the content of response.data.data - im not sure about this solution, it might be refactored to more functional way
-            _.map(eventsData, function(event) {
-              event.location = locationsDependencyHash[event.location["@id"]]
-            })
-            // run callback
-            callback(response.data)
+        .then(function(response) {
+          var eventsData = response.data.data
+          var locationsUrlList = []
+          var locationsDependencyHash = {}
+          //build dependency hash
+          _.forEach(eventsData, function(event) {
+            locationsUrlList.push(event.location["@id"])
           })
-      })
-      .catch(function(error) {
-        callback(error)
-      })
-  },
-  getSearch: function(callback) {
-    axios({
-        method: 'get',
-        url: API_SEARCH,
-      })
-      .then(function(response) {
-        callback(response.data)
-      })
-      .catch(function(error) {
-        console.log(error)
-        callback(error)
-      })
+          locationsUrlList = _.uniq(locationsUrlList)
+          //build promises array of dependent locations
+          promises = _.map(locationsUrlList, function(url) {
+            return axios({
+              method: 'get',
+              url: url
+            })
+          })
+          //retrieve dependent locations and add them to response data
+          Promise.all(promises)
+            .then(promiseResponses => {
+              //  console.log(promiseResponses)
+              // fill the dependency hash
+              _.forEach(promiseResponses, function(promiseResponse) {
+                locationsDependencyHash[promiseResponse.data["@id"]] = promiseResponse.data
+              })
+              // this changes the content of response.data.data - im not sure about this solution, it might be refactored to more functional way
+              _.map(eventsData, function(event) {
+                event.location = locationsDependencyHash[event.location["@id"]]
+              })
+              // run callback
+              callback(response.data)
+            })
+        })
+        .catch(function(error) {
+          callback(error)
+        })
+    })
   }
 }
 
