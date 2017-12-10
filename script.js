@@ -105,6 +105,7 @@ var searchForm = new Vue({
 	    vm.getSuggestion("place",val);
     }
   }
+  
 })
 
 var eventsResult = new Vue({
@@ -118,6 +119,9 @@ var eventsResult = new Vue({
       DS.getEvents(params, function(data) {
         vm.events = data.data
       })
+    },
+	    formatDate: function(a) {
+		console.log("moi");
     }
   }
 })
