@@ -7,35 +7,35 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
   <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
-    <link href="style.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
   <!-- Flatpickr (datepicker) related files -->
   <link href="https://unpkg.com/flatpickr@4/dist/flatpickr.min.css" rel="stylesheet">
 
   <script src="https://unpkg.com/flatpickr@4/dist/flatpickr.min.js"></script>
   <!-- datepicker -->
   <script src="https://unpkg.com/vue-flatpickr-component@5"></script>
-		<script>
-			var eventDetailVisible = false;
-			var ascending = true;
-			var eventsNum = 0;
-		</script>
+  <script>
+    var eventDetailVisible = false;
+    var ascending = true;
+    var eventsNum = 0;
+  </script>
 </head>
 
 <body>
-<div id="left">
-<div class="searchBackground">
-	  <div id="searchForm">
-	  <!--
+  <div id="left">
+    <div class="searchBackground">
+      <div id="searchForm">
+        <!--
 		<p class="searchItemHeader">Division</p>
 		<input  class="searchTextBox" v-model="division" placeholder="Division" type="text" />
 		-->
-		<p class="searchItemHeader">Location</p>
-		<input  class="searchTextBox" v-model="location" placeholder="Location" type="text"/>
-		<p class="searchItemHeader">Event starting date</p>
-		<date-picker class="searchTextBox" v-model="start" :config="config" :required="true" placeholder="Select start date"></date-picker>
-		<p class="searchItemHeader">Event ending date</p>
-		<date-picker class="searchTextBox" v-model="end" :config="config" :required="true" placeholder="Select end date"></date-picker>
-		<!--
+        <p class="searchItemHeader">Location</p>
+        <input class="searchTextBox" v-model="location" placeholder="Location" type="text" />
+        <p class="searchItemHeader">Event starting date</p>
+        <date-picker class="searchTextBox" v-model="start" :config="config" :required="true" placeholder="Select start date"></date-picker>
+        <p class="searchItemHeader">Event ending date</p>
+        <date-picker class="searchTextBox" v-model="end" :config="config" :required="true" placeholder="Select end date"></date-picker>
+        <!--
 		<p class="searchItemHeader">Order by</p>
 		<select class="orderBySelectBox" v-model="orderBy">
 		<option disabled value="">Please select one</option>
@@ -50,73 +50,48 @@
 		<input class="squareButton" id="ascendingDecending" type="checkbox" v-model="ascending">
 		<p id="ascendingDecendingText">Ascending</p>
 		-->
-		
-		<button id="getEventsButton" v-on:click="getResults">Get Events</button>
-	  </div>
-  </div>
-</div>
-<div id="right">
-  <div id="eventsResult">
-    <div v-for="event in events">
-	<script>
-	/*
-	date = new Date("event.start_time");
-	console.log(date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate());//prints expected format
-	*/
-	</script>
 
-      <div class="eventBox">
-		<div class="eventHeaderBar">
-		<p class="eventHeader">{{event.name ? event.name.fi : '' }}</p>
-		<p class="squareButton" onClick="eventDetailBox(eventsNum)">&#xf22c;</p>
-		<p class="eventInfoBox eventDate">{{event.start_time}}</p>
-		<p class="eventInfoBox eventLocation">{{event.location.name.fi}}</p>
-		</div>
-		
-		<div class="eventDescription" v-html="event.description ? event.description.fi : ''"></div>
-
-	   </div>
-	   
-
+        <button id="getEventsButton" v-on:click="getResults">Get Events</button>
+      </div>
     </div>
   </div>
-</div>
+  <div id="right">
+    <div id="eventsResult">
+      <div v-for="event in events">
+
+        <div class="eventBox">
+          <div class="eventHeaderBar">
+            <p class="eventHeader">{{event.name ? event.name.fi : '' }}</p>
+            <p class="squareButton" onClick="eventDetailBox(eventsNum)">&#xf22c;</p>
+            <p class="eventInfoBox eventDate">{{event.start_time}}</p>
+            <p class="eventInfoBox eventLocation">{{event.location.name.fi}}</p>
+          </div>
+
+          <div class="eventDescription" v-html="event.description ? event.description.fi : ''"></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- script should be loaded after page is rendered -->
   <script src="./script.js"></script>
-			<div id="eventDetailWrapper">
-				<div id="eventDetailBox">
-					<div id="eventDetailHeaderBar">
-						<p class="eventHeader">Event 1</p>
-						
-						<p class="squareButton" onclick="eventDetailBox()">&#xf00d;</p>
-					<p class="eventInfoBox eventDate">14.11.2017</p>
-					<p class="eventInfoBox eventDistrict">Kruununhaka</p>
-					<p class="eventInfoBox eventLocation">Helsinki City Hall</p>
-					</div>
-					<div id="eventDetailContentWrapper">
-						<!--<div class="eventImage" style="background-image: url('placeholder_image.png');"></div>-->
-						<p class="eventDescription">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia<br><br> dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate vab illo <br><br>inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate vab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia <br><br>non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate vab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate vab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate v</p>
-					</div>
-				</div>
-			</div>
-			<script>
 
+  <script>
+    function eventDetailBox(a) {
+      var eventDetailBoxElement = document.getElementById("eventDetailWrapper");
+      //eventDetailBoxElement.style.display = "none";
+      console.log(a);
+      if (eventDetailVisible) {
+        eventDetailBoxElement.style.display = "none";
+        eventDetailVisible = false;
+      } else {
 
-				function eventDetailBox(a){
-				var eventDetailBoxElement = document.getElementById("eventDetailWrapper");
-				//eventDetailBoxElement.style.display = "none";
-					console.log(a);
-					if(eventDetailVisible){
-						eventDetailBoxElement.style.display = "none";
-						eventDetailVisible = false;
-					}else{
-						
-						eventDetailBoxElement.style.display = "flex";
-						eventDetailVisible = true;
-					}
-				}
-			</script>  
-  
+        eventDetailBoxElement.style.display = "flex";
+        eventDetailVisible = true;
+      }
+    }
+  </script>
+
 </body>
 
 </html>

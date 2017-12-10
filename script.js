@@ -90,25 +90,8 @@ var searchForm = new Vue({
       eventsResult.getResults(
         _.omit(vm.$data, ['config'])
       )
-    },
-    getSuggestion: function(type, val) {
-      //search/?type=place&input=sibe
-      DS.getSearch({
-        type: type,
-        input: val
-      }, function(data) {
-        //vm.events = data.data
-        //console.log(data.data);
-      })
-    }
-  },
-  watch: {
-    location: function(val, oldVal) {
-      vm = this
-      vm.getSuggestion("place", val);
     }
   }
-
 })
 
 var eventsResult = new Vue({
@@ -122,9 +105,6 @@ var eventsResult = new Vue({
       DS.getEvents(params, function(data) {
         vm.events = data.data
       })
-    },
-    formatDate: function(a) {
-      console.log("moi");
     }
   }
 })
