@@ -75,7 +75,8 @@ var DS = {
       locationPromise = Promise.resolve()
     }
     locationPromise.then(location => {
-      requestParams = _.omit(params, ['location'])
+      requestParamsWithoutLocation = _.omit(params, ['location'])
+      requestParams = _.pickBy(requestParamsWithoutLocation , _.identity)
       location ? requestParams.location = location : null
       axios({
           method: 'get',
