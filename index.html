@@ -20,6 +20,8 @@
   <div id="left">
     <div class="searchBackground">
       <div id="searchForm">
+        <p class="searchItemHeader">Query</p>
+        <input class="searchTextBox" v-model="q" placeholder="Query" type="text" />
         <p class="searchItemHeader">Location</p>
         <input class="searchTextBox" v-model="location" placeholder="Location" type="text" />
         <p class="searchItemHeader">Event starting date</p>
@@ -32,20 +34,31 @@
   </div>
   <div id="right">
     <div id="eventsResult">
+	      <button class="pageButton previousButton" v-if="previous" v-on:click="getPreviousPage">Previous</button>
+      <button class="pageButton nextButton" v-if="next" v-on:click="getNextPage">Next</button>
       <div v-for="event in events">
 
         <div class="eventBox">
           <div class="eventHeaderBar">
             <p class="eventHeader">{{event.name ? event.name.fi : '' }}</p>
-            <p class="squareButton" onClick="eventDetailBox(eventsNum)">&#xf22c;</p>
-            <p class="eventInfoBox eventDate">{{event.start_time}}</p>
+            <!--<p class="squareButton" onClick="eventDetailBox(eventsNum)">&#xf22c;</p>-->
+            <p class="eventInfoBox eventDate" v-html="formatDate(event.start_time)"></p>
             <p class="eventInfoBox eventLocation">{{event.location.name.fi}}</p>
+
+			
           </div>
+
+			<div class="eventImageWrapper" v-if="event.images.length > 0">
+				<img class="eventImage" v-bind:src="event.images[0].url">
+			</div>
 
           <div class="eventDescription" v-html="event.description ? event.description.fi : ''"></div>
 
         </div>
       </div>
+      <button class="pageButton previousButton" v-if="previous" v-on:click="getPreviousPage">Previous</button>
+
+      <button class="pageButton nextButton" v-if="next" v-on:click="getNextPage">Next</button>
     </div>
   </div>
   <!-- script should be loaded after page is rendered -->

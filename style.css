@@ -103,25 +103,51 @@ font-size:1em;
 			text-align:center;
 			line-height:50px;
 			cursor:pointer;
-			-webkit-filter: brightness(100%);
+			
 }
 #getEventsButton:hover {
-    -webkit-filter: brightness(70%);
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+filter: brightness(90%);
+}
+.eventImageWrapper{
+
 }
 .eventImage{
   width: calc(100% - 20px);
-  height: 200px;
-  max-height: 200px;
+ 
+
   margin:0px;
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
   margin:10px;
+}
+.pageButton{
+	font-family: 'Quicksand';
+	font-size:1em;
+	color:white;
+	display:inline;
+	text-align:center;	
+line-height:50px;
+	height:50px;
+	width:calc(50% - 5px);
+	
+	border:none;
+	cursor: pointer;	
+	background-color:var(--dark);
+	display:inline-block;
+	
+	border-radius:3px;
+	margin-right:5px;
+	margin-bottom:5px;
+}
+.pageButton:hover {
+filter: brightness(90%);
+}
+.previousButton{
+	float:left;
+}
+.nextButton{
+	float:right;
 }
 .eventBox{
 float:left;
@@ -211,7 +237,7 @@ line-height:30px;
 	margin-right:5px;
 }
 .squareButton:hover{
-background-image: url("dark.png");
+filter: brightness(90%);
 }
 .eventHeaderBar{
 height:40px;
@@ -264,6 +290,6 @@ font-size:1em;
     transform: rotate(180deg);
 }
 .orderBySelectBox:hover{
-background-image: url("dark.png");
+filter: brightness(90%);
 }
 
