@@ -30,12 +30,13 @@ overflow:scroll;
  overflow: hidden;
 }
 #right{
-height:calc(100% - 5px);
+height:calc(100% - 60px);
 padding-top:5px;
 overflow:scroll;
     background-color:var(--background);
 	 overflow-y: scroll;
  overflow-x: hidden;
+padding-bottom:55px;
 }
 .searchBackground{
 color:#dddddd;
@@ -125,17 +126,18 @@ filter: brightness(90%);
 	font-family: 'Quicksand';
 	font-size:1em;
 	color:white;
-	display:inline;
+	position: fixed !important;
 	text-align:center;	
 line-height:50px;
 	height:50px;
-	width:calc(50% - 5px);
+	width:100px;
 	
 	border:none;
 	cursor: pointer;	
-	background-color:var(--dark);
+	background-color:#bb8116;
 	display:inline-block;
-	
+	bottom:0px;
+	right:0px;
 	border-radius:3px;
 	margin-right:5px;
 	margin-bottom:5px;
@@ -144,10 +146,11 @@ line-height:50px;
 filter: brightness(90%);
 }
 .previousButton{
-	float:left;
+
+	right:105px;
 }
 .nextButton{
-	float:right;
+	
 }
 .eventBox{
 float:left;
